@@ -1,46 +1,35 @@
-import { Button, Flex, Text } from "@chakra-ui/react";
+import { Flex, Text } from "@chakra-ui/react";
 import { NextPage } from "next";
-import { useAppDispatch } from "../hooks/useAppDispatch";
-import { useAppSelector } from "../hooks/useAppSelector";
-import { login, logout } from "../redux/features/auth/authSlice";
+import YouTube from "react-youtube";
+import { YouTubePlayer } from 'youtube-player/dist/types';
 
 const Home: NextPage = () => {
-  const dispatch = useAppDispatch()
-  const { user, isLogged } = useAppSelector(state => state.auth)
-
-  const handleLogin = () => {
-    const mockedUser = {
-      name: 'test',
-      email:' test@email.com'
-    }
-
-    dispatch(login(mockedUser))
-  }
-
-  const handleLogout = () => {
-    dispatch(logout())
+  const onReady = ({ target }: { target : YouTubePlayer}) => {
+    target.pauseVideo();
   }
 
   return (
-    <Flex w="100vw" h="100vh" bg="brand.900" >
-      <Text color="brand.700">OLA</Text>
-      {isLogged ? (
-        <Button onClick={handleLogout}>
-          <Text>deslogar</Text>
-        </Button>
-      ) : (
-          <Button onClick={handleLogin}>
-            <Text>logar</Text>
-          </Button>
-        )
-      }
-
-      {!!user && (
-        <>
-          <Text>{user.email}</Text>
-          <Text>{user.name}</Text>
-        </>
-      )}
+    <Flex
+      flexDir="column" 
+      align="flex-start"
+      bg="background" 
+      px="10rem"
+      py="2rem"
+    >
+      <Text as="h1" textAlign="left" mb="2rem">Cinema</Text>
+      <Flex align="center" justify="center">
+        <YouTube 
+          videoId="B530tFZNGI0" 
+          opts={{
+            height: '720',
+            width: '1280',
+            playerVars: {
+              autoplay: 0,
+            }
+          }} 
+          onReady={onReady}
+        />
+      </Flex>
     </Flex>
   )
 }
