@@ -5,9 +5,7 @@ export default function Dashboard() {
   return (
     <Flex direction="column" h="100vh">
       <Flex
-        w="100%"
-        maxWidth={1480}
-        h="full"
+        w="100vw"
       >
         <Sidebar />
       </Flex>

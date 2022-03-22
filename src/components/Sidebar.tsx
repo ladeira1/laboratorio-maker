@@ -1,49 +1,69 @@
-import { Box, Icon, Link, Stack, Text } from "@chakra-ui/react";
+import { Box, Icon, Link, Stack, Text, Heading } from "@chakra-ui/react";
 import { RiHome2Line, RiCalendarEventLine, RiSuitcaseLine, RiFileInfoLine, RiTvLine } from "react-icons/ri"
 import { SiProbot } from "react-icons/si"
+import NextLink from 'next/link'
 
-export function Sidebar() {
+export const Sidebar = () => {
+
+  const items = [
+    {
+      icon: RiHome2Line,
+      text: "Início",
+      href: "/"
+    },
+    {
+      icon: RiCalendarEventLine,
+      text: "Agendamento",
+      href: "/schedule"
+    },
+    {
+      icon: RiSuitcaseLine,
+      text: "Estoque",
+      href: "/storage"
+    },
+    {
+      icon: RiFileInfoLine,
+      text: "Letreiro",
+      href: "/board"
+    },
+    {
+      icon: RiTvLine,
+      text: "Cinema",
+      href: "/cinema"
+    }
+  ]
+
   return (
     <Box
       as="aside"
       w="52"
       mr="8"
       bg="gray.800"
+      h="100vh"
     >
-      <Text
-        fontSize="3xl"
-        fontWeight="bold"
+      <Heading
+        fontWeight="600"
         letterSpacing="tight"
+        fontSize="1.6rem"
+        as="h3"
         w="64"
         ml="6"
         mt="4"
       >
         Maker
         <Icon as={SiProbot} ml="2" fontSize="20" />
-      </Text>
+      </Heading>
       <Stack ml="6" spacing="12" align="flex-start">
         <Box>
           <Stack spacing="6" mt="8" align="stretch">
-            <Link display="flex" >
-              <Icon as={RiHome2Line} fontSize="20" />
-              <Text ml="2" fontWeight="medium">Inicio</Text>
-            </Link>
-            <Link display="flex">
-              <Icon as={RiCalendarEventLine} fontSize="20" />
-              <Text ml="2" fontWeight="medium">Agendamentos</Text>
-            </Link>
-            <Link display="flex">
-              <Icon as={RiSuitcaseLine} fontSize="20" />
-              <Text ml="2" fontWeight="medium">Estoque</Text>
-            </Link>
-            <Link display="flex">
-              <Icon as={RiFileInfoLine} fontSize="20" />
-              <Text ml="2" fontWeight="medium">Letreiro</Text>
-            </Link>
-            <Link display="flex">
-              <Icon as={RiTvLine} fontSize="20" />
-              <Text ml="2" fontWeight="medium">Cinema</Text>
-            </Link>
+            {items.map(item => (
+              <NextLink href={item.href} key={item.text} >
+                <Link display="flex">
+                  <Icon as={item.icon} fontSize="20" />
+                  <Text ml="2" fontWeight="medium">{item.text}</Text>
+                </Link>
+              </NextLink>
+            ))}
           </Stack>
         </Box>
       </Stack>
