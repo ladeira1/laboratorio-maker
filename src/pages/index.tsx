@@ -1,37 +1,34 @@
-import { Flex, Table, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/react'
-import type { NextPage } from 'next'
+import { Button, Flex } from "@chakra-ui/react";
+import { Sidebar } from "../components/Sidebar";
+import { getSession, signOut } from 'next-auth/react'
+import { GetServerSideProps } from "next";
 
-const Home: NextPage = () => {
+export default function Dashboard() {
   return (
-    <Flex align="center" justify="center" mx="4rem" my="4rem"  borderWidth={1} borderBottomWidth={0} borderColor="support" borderRadius="5">
-      <Table >
-        <Thead>
-          <Tr>
-            <Th color="white">To convert</Th>
-            <Th color="white">into</Th>
-            <Th color="white" isNumeric>multiply by</Th>
-          </Tr>
-        </Thead>
-        <Tbody>
-          <Tr>
-            <Td>inches</Td>
-            <Td>millimetres (mm)</Td>
-            <Td isNumeric>25.4</Td>
-          </Tr>
-          <Tr >
-            <Td>feet</Td>
-            <Td>centimetres (cm)</Td>
-            <Td isNumeric>30.48</Td>
-          </Tr>
-          <Tr>
-            <Td>yards</Td>
-            <Td>metres (m)</Td>
-            <Td isNumeric>0.91444</Td>
-          </Tr>
-        </Tbody>
-    </Table>
-  </Flex>
+    <Flex direction="column" h="100vh">
+      <Flex
+        w="100vw"
+      >
+        <Sidebar />
+
+      </Flex>
+    </Flex>
   )
 }
 
-export default Home
+export const getServerSideProps: GetServerSideProps = async ({ req, params }) => {
+  const session = await getSession({ req })
+
+  if(!session) {
+    return {
+      redirect: {
+        destination: '/login',
+        permanent: false,
+      }
+    }
+  }
+
+  return {
+    props: {}
+  }
+}
