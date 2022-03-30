@@ -1,0 +1,51 @@
+generator client {
+  provider = "prisma-client-js"
+  previewFeatures = ["referentialIntegrity"]
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+  referentialIntegrity = "prisma"
+}
+
+model Category {
+  id          Int     @id @default(autoincrement())
+  name        String  @db.VarChar(100)
+  description String?
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  Product   Product[]
+}
+
+model Locker {
+  id             Int     @id @default(autoincrement())
+  numberOfDoors  Int
+  numberOfFloors Int
+  name           String?
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  Product   Product[]
+}
+
+model Product {
+  id     Int    @id @default(autoincrement())
+  name   String @db.VarChar(100)
+  amount Int
+
+  category   Category @relation(fields: [categoryId], references: [id])
+  categoryId Int
+
+  locker   Locker @relation(fields: [lockerId], references: [id])
+  lockerId Int
+  floor    Int
+  door     Int
+
+  createdBy String
+  updatedBy String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

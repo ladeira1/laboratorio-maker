@@ -2,7 +2,7 @@ import { AspectRatio, Flex, Heading, Text } from "@chakra-ui/react";
 import { NextPage } from "next";
 import YouTube from "react-youtube";
 import { YouTubePlayer } from 'youtube-player/dist/types';
-import { Sidebar } from '../components/Sidebar'
+import { Sidebar } from "../../components/Sidebar";
 
 const Home: NextPage = () => {
   const onReady = ({ target }: { target: YouTubePlayer }) => {
@@ -18,13 +18,14 @@ const Home: NextPage = () => {
         px="10rem"
         py="2rem"
       >
+
         <Heading as="h1" textAlign="left" mb="2rem">Cinema</Heading>
         <Flex align="center" justify="center">
           <YouTube
             videoId="B530tFZNGI0"
             opts={{
-              height: '720',
-              width: '1280',
+              height: '480',
+              width: '920',
               playerVars: {
                 autoplay: 0,
               }
