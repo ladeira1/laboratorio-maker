@@ -9,27 +9,27 @@ export const Sidebar = () => {
     {
       icon: RiHome2Line,
       text: "Início",
-      href: "/"
+      href: "/app/dashboard"
     },
     {
       icon: RiCalendarEventLine,
       text: "Agendamento",
-      href: "/schedule"
+      href: "/app/schedule"
     },
     {
       icon: RiSuitcaseLine,
       text: "Estoque",
-      href: "/storage"
+      href: "/app/storage"
     },
     {
       icon: RiFileInfoLine,
       text: "Letreiro",
-      href: "/board"
+      href: "/app/board"
     },
     {
       icon: RiTvLine,
       text: "Cinema",
-      href: "/cinema"
+      href: "/app/cinema"
     }
   ]
 
