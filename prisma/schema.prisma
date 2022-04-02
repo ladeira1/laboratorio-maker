@@ -23,7 +23,7 @@ model Locker {
   id             Int     @id @default(autoincrement())
   numberOfDoors  Int
   numberOfFloors Int
-  name           String?
+  name           String
 
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt

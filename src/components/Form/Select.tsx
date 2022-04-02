@@ -2,8 +2,8 @@ import { forwardRef, ForwardRefRenderFunction } from "react";
 import {
   FormControl,
   Text,
-  Input as ChakraInput,
-  InputProps as ChakraInputProps,
+  Select as ChakraSelect,
+  SelectProps as ChakraSelectProps,
   Tooltip,
   FormErrorMessage,
   Icon,
@@ -13,14 +13,15 @@ import {
 import { FieldError } from "react-hook-form";
 import { FiAlertCircle } from "react-icons/fi";
 
-interface InputProps extends ChakraInputProps {
+interface SelectProps extends ChakraSelectProps {
   label?: string;
   name: string;
+  options?: { id: string | number; name: string }[];
   error?: FieldError;
 }
 
-const TextInputBase: ForwardRefRenderFunction<HTMLInputElement, InputProps> = (
-  { name, label, my, mt, mb, error, ...rest },
+const SelectBase: ForwardRefRenderFunction<HTMLSelectElement, SelectProps> = (
+  { name, options, label, my, mt, mb, error, ...rest },
   ref
 ) => {
   return (
@@ -40,7 +41,7 @@ const TextInputBase: ForwardRefRenderFunction<HTMLInputElement, InputProps> = (
           {label}
         </Text>
       )}
-      <ChakraInput
+      <ChakraSelect
         borderColor="gray.800"
         _hover={{
           borderColor: "red",
@@ -60,7 +61,13 @@ const TextInputBase: ForwardRefRenderFunction<HTMLInputElement, InputProps> = (
         name={name}
         ref={ref}
         {...rest}
-      />
+      >
+        {options?.map((item) => (
+          <option key={item.id} value={item.id}>
+            {item.name}
+          </option>
+        ))}
+      </ChakraSelect>
 
       {!!error ? (
         <FormErrorMessage mt="0.5rem" ml="0.2rem" zIndex="tooltip">
@@ -74,4 +81,4 @@ const TextInputBase: ForwardRefRenderFunction<HTMLInputElement, InputProps> = (
     </FormControl>
   );
 };
-export const TextInput = forwardRef(TextInputBase);
+export const Select = forwardRef(SelectBase);
