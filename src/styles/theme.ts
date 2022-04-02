@@ -38,7 +38,10 @@ const styles = {
       color: 'white'
     },
     th: {
-      color: 'red'
+      color: 'blue'
+    },
+    tr: {
+      color: 'gray.400',
     },
   }
 }
