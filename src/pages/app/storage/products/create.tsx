@@ -11,6 +11,8 @@ import { prisma } from "services/prisma";
 import superjson from "superjson";
 import { Select } from "components/Form/Select";
 import { useRouter } from "next/router";
+import { api } from "services/api";
+import { useSession } from "next-auth/react";
 
 type Values = Omit<Product, "id">;
 
@@ -21,9 +23,14 @@ interface CreateProductProps {
 
 const CreateProduct = ({ categories, lockers }: CreateProductProps) => {
   const router = useRouter();
+  const session = useSession();
 
-  const [selectedLockerData, setSeletedLockerData] =
-    useState<Pick<Locker, "numberOfDoors" | "numberOfFloors">>();
+  const [selectedLockerData, setSeletedLockerData] = useState<
+    Pick<Locker, "numberOfDoors" | "numberOfFloors">
+  >({
+    numberOfDoors: lockers[0].numberOfDoors,
+    numberOfFloors: lockers[0].numberOfFloors,
+  });
 
   const schema = yup.object({
     name: yup.string().required("Campo obrigatório"),
@@ -63,7 +70,6 @@ const CreateProduct = ({ categories, lockers }: CreateProductProps) => {
   const {
     register,
     handleSubmit,
-    getValues,
     formState: { errors },
   } = useForm<Values>({ resolver: yupResolver(schema) });
 
@@ -71,7 +77,6 @@ const CreateProduct = ({ categories, lockers }: CreateProductProps) => {
     event: ChangeEvent<HTMLSelectElement>
   ) => {
     const selectedLockerId = event.target.value;
-    console.log("selectedLockerId", selectedLockerId);
     const selectedLocker = lockers.find(
       (item) => item.id === Number(selectedLockerId)
     );
@@ -84,8 +89,15 @@ const CreateProduct = ({ categories, lockers }: CreateProductProps) => {
     }
   };
 
-  const onSubmit: SubmitHandler<Values> = (data) => {
-    console.log(data);
+  const onSubmit: SubmitHandler<Values> = async (data) => {
+    try {
+      await api.post("/api/storage/products/create", {
+        ...data,
+        createdBy: session.data?.user?.email,
+      });
+    } catch (err) {
+      console.log("TODO: add error feedback", err);
+    }
   };
 
   return (
