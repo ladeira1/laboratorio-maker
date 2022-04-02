@@ -25,7 +25,7 @@ const CreateProduct = ({ categories, lockers }: CreateProductProps) => {
   const router = useRouter();
   const session = useSession();
 
-  const [selectedLockerData, setSeletedLockerData] = useState<
+  const [selectedLockerData, setSelectedLockerData] = useState<
     Pick<Locker, "numberOfDoors" | "numberOfFloors">
   >({
     numberOfDoors: lockers[0].numberOfDoors,
@@ -82,7 +82,7 @@ const CreateProduct = ({ categories, lockers }: CreateProductProps) => {
     );
 
     if (selectedLocker) {
-      setSeletedLockerData({
+      setSelectedLockerData({
         numberOfDoors: selectedLocker.numberOfDoors,
         numberOfFloors: selectedLocker.numberOfFloors,
       });

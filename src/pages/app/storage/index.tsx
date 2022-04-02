@@ -1,26 +1,26 @@
 import {
+  Button,
   Flex,
   Heading,
-  TableContainer,
+  Link,
   Table,
-  Thead,
-  Tr,
-  Th,
+  TableContainer,
   Tbody,
   Td,
-  Tfoot,
-  Button,
-  Link,
+  Th,
+  Thead,
+  Text,
+  Tr,
 } from "@chakra-ui/react";
 import { Category, Locker, Product } from "@prisma/client";
 import { Sidebar } from "components/Sidebar";
-import { GetServerSideProps } from "next";
-import React from "react";
-import { prisma } from "services/prisma";
-import superjson from "superjson";
 import NextLink from "next/link";
+import React, { useEffect, useState } from "react";
+import { api } from "services/api";
+import InfiniteScroll from "react-infinite-scroller";
+import { usePagination } from "hooks/usePagination";
 
-const columNames = [
+const columnNames = [
   "Categoria",
   "Nome",
   "Quantidade",
@@ -29,14 +29,33 @@ const columNames = [
   "Andar",
 ];
 
-interface StorageProps {
-  products: (Product & {
-    category: Category;
-    locker: Locker;
-  })[];
-}
+type ProductList = (Product & {
+  category: Category;
+  locker: Locker;
+})[];
 
-const Storage = ({ products }: StorageProps) => {
+const Storage = () => {
+  const fetchProducts = async () => {
+    return await api.get<{
+      products: ProductList;
+      nextPage: number | null;
+      totalPages: number;
+    }>(`/api/storage/products?page=${page}&limit=${10}`);
+  };
+
+  const { page, shouldFetchMoreData, fetchMoreData } = usePagination({
+    request: fetchProducts,
+  });
+
+  const [products, setProducts] = useState<ProductList>([]);
+
+  const handleFetchMoreData = async () => {
+    const data = await fetchMoreData();
+    if (!data) return;
+
+    setProducts((oldState) => [...oldState, ...data.products]);
+  };
+
   return (
     <Flex direction="column" h="100vh">
       <Flex w="100vw">
@@ -55,55 +74,53 @@ const Storage = ({ products }: StorageProps) => {
             borderColor="gray.200"
             borderRadius={10}
           >
-            <Table variant="simple">
-              <Thead>
-                <Tr>
-                  {columNames.map((item) => (
-                    <Th
-                      key={item}
-                      borderBottomColor="gray.200"
-                      color="gray.200"
-                      fontSize="1.1rem"
-                      fontWeight="500"
-                      h="14"
-                    >
-                      {item}
-                    </Th>
-                  ))}
-                </Tr>
-              </Thead>
-              <Tbody>
-                {products?.map((item) => (
-                  <Tr key={item.id}>
-                    <Td borderBottomColor="gray.600">{item.category.name}</Td>
-                    <Td borderBottomColor="gray.600">{item.name}</Td>
-                    <Td borderBottomColor="gray.600">{`${item.amount} unidade${
-                      item?.amount === 1 ? "" : "s"
-                    }`}</Td>
-                    <Td borderBottomColor="gray.600">{item.locker.name}</Td>
-                    <Td borderBottomColor="gray.600">{item.door}</Td>
-                    <Td borderBottomColor="gray.600">{item.floor}</Td>
-                  </Tr>
-                ))}
-              </Tbody>
-            </Table>
+            {products && (
+              <InfiniteScroll
+                pageStart={1}
+                loadMore={handleFetchMoreData}
+                hasMore={shouldFetchMoreData}
+              >
+                <Table variant="simple">
+                  <Thead>
+                    <Tr>
+                      {columnNames.map((item) => (
+                        <Th
+                          key={item}
+                          borderBottomColor="gray.200"
+                          color="gray.200"
+                          fontSize="1.1rem"
+                          fontWeight="500"
+                          h="14"
+                        >
+                          {item}
+                        </Th>
+                      ))}
+                    </Tr>
+                  </Thead>
+                  <Tbody>
+                    {products?.map((item) => (
+                      <Tr key={item.id}>
+                        <Td borderBottomColor="gray.600">
+                          {item.category.name}
+                        </Td>
+                        <Td borderBottomColor="gray.600">{item.name}</Td>
+                        <Td borderBottomColor="gray.600">{`${
+                          item.amount
+                        } unidade${item?.amount === 1 ? "" : "s"}`}</Td>
+                        <Td borderBottomColor="gray.600">{item.locker.name}</Td>
+                        <Td borderBottomColor="gray.600">{item.door}</Td>
+                        <Td borderBottomColor="gray.600">{item.floor}</Td>
+                      </Tr>
+                    ))}
+                  </Tbody>
+                </Table>
+              </InfiniteScroll>
+            )}
           </TableContainer>
         </Flex>
       </Flex>
     </Flex>
   );
-};
-
-export const getServerSideProps: GetServerSideProps = async () => {
-  const products = await prisma.product.findMany({
-    include: { category: true, locker: true },
-  });
-
-  return {
-    props: {
-      products: superjson.serialize(products).json,
-    },
-  };
 };
 
 export default Storage;
