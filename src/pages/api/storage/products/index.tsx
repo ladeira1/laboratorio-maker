@@ -11,14 +11,12 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
       a += "b";
 
-      const products = await prisma.product
-        .findMany({
-          orderBy: { updatedAt: "asc" },
-          include: { category: true, locker: true },
-          take: limit,
-          skip: startIndex,
-        })
-        .catch((err) => (a += JSON.stringify(err)));
+      const products = await prisma.product.findMany({
+        orderBy: { updatedAt: "asc" },
+        include: { category: true, locker: true },
+        take: limit,
+        skip: startIndex,
+      });
 
       a += "c";
       const totalPages = Math.ceil((await prisma.product.count()) / limit);
