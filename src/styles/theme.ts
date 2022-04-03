@@ -2,12 +2,14 @@ import { ComponentStyleConfig, extendTheme } from '@chakra-ui/react'
 
 const colors = {
   background: '#0B0E11',
-  white: '#fff',
+  white: '#e4e6eb',
   black: '#0B0E11',
   red: '#FD4D4D',
   gray: {
-    800: '#242c37',
+    800: '#151a21',
+    700: '#323d4d',
     600: '#2D353F',
+    500: '#A9A9A9',
     400: '#DEE3EA',
     200: '#F0EFEF',
   }
@@ -28,13 +30,13 @@ const styles = {
     h1: {
       fontSize: '1.8rem',
       fontFamily: 'Roboto, sans-serif',
-      fontWeight: '700',
+      fontWeight: '6  00',
       color: 'white'
     },
     h2: {
       fontSize: '1.6rem',
       fontFamily: 'Roboto, sans-serif',
-      fontWeight: '700',
+      fontWeight: '600',
       color: 'white'
     },
     th: {
@@ -81,7 +83,7 @@ const Button: ComponentStyleConfig = {
     },
     solid: {
       bg: 'red',
-      color: 'white',
+      color: 'gray.200',
       _hover: {
         bg: 'red',
         opacity: 0.8,
