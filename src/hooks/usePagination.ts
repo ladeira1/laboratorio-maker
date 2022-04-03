@@ -15,8 +15,9 @@ interface UsePaginationProps {
     const [page, setPage] = useState<number | null>(1);
     const [totalPages, setTotalPages] = useState<number>(2);
     const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState<string | null>()
 
-    const shouldFetchMoreData = page !== null && totalPages >= page && !isLoading
+    const shouldFetchMoreData = !error && page !== null && totalPages >= page && !isLoading
 
     const fetchMoreData = async () => {
       try{
@@ -30,6 +31,7 @@ interface UsePaginationProps {
         return response.data;
       } catch(err) {
         setIsLoading(false)
+        setError('error')
         console.log(err)
       }
     }
