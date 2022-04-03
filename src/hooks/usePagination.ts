@@ -29,6 +29,7 @@ interface UsePaginationProps {
 
         return response.data;
       } catch(err) {
+        setIsLoading(false)
         console.log(err)
       }
     }
