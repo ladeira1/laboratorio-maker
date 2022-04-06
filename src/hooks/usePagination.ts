@@ -1,26 +1,24 @@
 import { AxiosResponse } from "axios";
 import { useState } from "react";
+import { useStyledToast } from "./useStyledToast";
 
 interface UsePaginationProps {
-  request: () => Promise<AxiosResponse<Record<string, any>
-//   {
-//     products: ProductList;
-//     nextPage: number | null;
-//     totalPages: number;
-// }
-, any>>;
+  request: () => Promise<AxiosResponse<Record<string, any>, any>>;
 }
 
   export const usePagination = ({ request }: UsePaginationProps) => {
+  const { error: errorToast } = useStyledToast();
+
     const [page, setPage] = useState<number | null>(1);
     const [totalPages, setTotalPages] = useState<number>(2);
     const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState<string | null>()
+    const [hasError, setHasError] = useState<boolean>(false)
 
-    const shouldFetchMoreData = !error && page !== null && totalPages >= page && !isLoading
+    const shouldFetchMoreData = !hasError && page !== null && totalPages >= page && !isLoading
 
     const fetchMoreData = async () => {
       try{
+        setHasError(false);
         setIsLoading(true);
         const response = await request();
   
@@ -31,16 +29,16 @@ interface UsePaginationProps {
         return response.data;
       } catch(err) {
         setIsLoading(false)
-        setError('error')
-        console.log(err)
+        setHasError(true)
+        errorToast({ error: err });
       }
     }
 
-    return {
-      page,
-      totalPages,
-      isLoading,
-      fetchMoreData,
-      shouldFetchMoreData
-    }
-  }
+  return {
+    page,
+    totalPages,
+    isLoading,
+    fetchMoreData,
+    shouldFetchMoreData,
+  };
+};
