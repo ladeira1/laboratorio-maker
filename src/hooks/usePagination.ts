@@ -1,44 +1,41 @@
 import { AxiosResponse } from "axios";
 import { useState } from "react";
+import { useStyledToast } from "./useStyledToast";
 
 interface UsePaginationProps {
-  request: () => Promise<AxiosResponse<Record<string, any>
-//   {
-//     products: ProductList;
-//     nextPage: number | null;
-//     totalPages: number;
-// }
-, any>>;
+  request: () => Promise<AxiosResponse<Record<string, any>, any>>;
 }
 
-  export const usePagination = ({ request }: UsePaginationProps) => {
-    const [page, setPage] = useState<number | null>(1);
-    const [totalPages, setTotalPages] = useState<number>(2);
-    const [isLoading, setIsLoading] = useState(false);
+export const usePagination = ({ request }: UsePaginationProps) => {
+  const { error } = useStyledToast();
 
-    const shouldFetchMoreData = page !== null && totalPages >= page && !isLoading
+  const [page, setPage] = useState<number | null>(1);
+  const [totalPages, setTotalPages] = useState<number>(2);
+  const [isLoading, setIsLoading] = useState(false);
 
-    const fetchMoreData = async () => {
-      try{
-        setIsLoading(true);
-        const response = await request();
-  
-        setPage(response.data.nextPage);
-        setTotalPages(response.data.totalPages);
-        setIsLoading(false);
+  const shouldFetchMoreData = page !== null && totalPages >= page && !isLoading;
 
-        return response.data;
-      } catch(err) {
-        setIsLoading(false)
-        console.log(err)
-      }
+  const fetchMoreData = async () => {
+    try {
+      setIsLoading(true);
+      const response = await request();
+
+      setPage(response.data.nextPage);
+      setTotalPages(response.data.totalPages);
+      setIsLoading(false);
+
+      return response.data;
+    } catch (err) {
+      setIsLoading(false);
+      error({ error: err });
     }
+  };
 
-    return {
-      page,
-      totalPages,
-      isLoading,
-      fetchMoreData,
-      shouldFetchMoreData
-    }
-  }
+  return {
+    page,
+    totalPages,
+    isLoading,
+    fetchMoreData,
+    shouldFetchMoreData,
+  };
+};
