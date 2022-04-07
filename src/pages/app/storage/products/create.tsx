@@ -1,4 +1,4 @@
-import { Button, Flex, Heading, HStack } from "@chakra-ui/react";
+import { Button, Flex, Heading, HStack, useToast } from "@chakra-ui/react";
 import { Category, Locker, Product } from "@prisma/client";
 import { Sidebar } from "components/Sidebar";
 import React, { ChangeEvent, useState } from "react";
@@ -13,6 +13,7 @@ import { Select } from "components/Form/Select";
 import { useRouter } from "next/router";
 import { api } from "services/api";
 import { useSession } from "next-auth/react";
+import { useStyledToast } from "../../../../hooks/useStyledToast";
 
 type Values = Omit<Product, "id">;
 
@@ -44,7 +45,7 @@ const CreateProduct = ({ categories, lockers }: CreateProductProps) => {
     door: yup
       .number()
       .typeError("Você precisa informar um número")
-      .integer("oi")
+      .integer("Você precisa informar um número inteiro")
       .min(1, "O valor deve ser maior o igual a 1")
       .max(
         selectedLockerData?.numberOfDoors ?? 1,
@@ -73,6 +74,8 @@ const CreateProduct = ({ categories, lockers }: CreateProductProps) => {
     formState: { errors },
   } = useForm<Values>({ resolver: yupResolver(schema) });
 
+  const { success, error } = useStyledToast();
+
   const handleChangeSelectedLockerData = (
     event: ChangeEvent<HTMLSelectElement>
   ) => {
@@ -95,8 +98,14 @@ const CreateProduct = ({ categories, lockers }: CreateProductProps) => {
         ...data,
         createdBy: session.data?.user?.email,
       });
+
+      success({
+        description: "Produto criado com sucesso",
+      });
     } catch (err) {
-      console.log("TODO: add error feedback", err);
+      error({
+        error: err,
+      });
     }
   };
 
@@ -147,19 +156,27 @@ const CreateProduct = ({ categories, lockers }: CreateProductProps) => {
               onChange={handleChangeSelectedLockerData}
             />
 
-            <TextInput
-              placeholder="1"
-              max={selectedLockerData?.numberOfDoors ?? 1}
+            <Select
               label="Selecione a porta do armário"
               {...register("door")}
+              options={[
+                ...new Array(selectedLockerData?.numberOfDoors ?? 0),
+              ].map((_, index) => ({
+                id: index + 1,
+                name: String(index + 1),
+              }))}
               error={errors?.door}
             />
 
-            <TextInput
-              placeholder="1"
-              max={selectedLockerData?.numberOfFloors ?? 1}
+            <Select
               label="Selecione o andar do armário"
               {...register("floor")}
+              options={[
+                ...new Array(selectedLockerData?.numberOfFloors ?? 0),
+              ].map((_, index) => ({
+                id: index + 1,
+                name: String(index + 1),
+              }))}
               error={errors?.floor}
             />
 
@@ -173,7 +190,7 @@ const CreateProduct = ({ categories, lockers }: CreateProductProps) => {
                 Voltar
               </Button>
               <Button flex="1" type="submit" size="lg">
-                Acessar
+                Criar
               </Button>
             </HStack>
           </Flex>
