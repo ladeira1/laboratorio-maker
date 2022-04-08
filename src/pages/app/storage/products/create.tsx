@@ -14,6 +14,8 @@ import { useRouter } from "next/router";
 import { api } from "services/api";
 import { useSession } from "next-auth/react";
 import { useStyledToast } from "../../../../hooks/useStyledToast";
+import { Wrapper } from "components/Wrapper";
+import { Item } from "components/Item";
 
 type Values = Omit<Product, "id">;
 
@@ -110,93 +112,84 @@ const CreateProduct = ({ categories, lockers }: CreateProductProps) => {
   };
 
   return (
-    <Flex direction="column" h="100vh">
-      <Flex w="100vw">
-        <Sidebar />
+    <Wrapper title="Cadastrar novo produto" titleAlign="center">
+      <Flex
+        flexDir={"column"}
+        as="form"
+        onSubmit={handleSubmit(onSubmit)}
+        borderWidth={2}
+        borderColor="gray.800"
+        borderRadius="5"
+        p="2rem"
+        w="500px"
+        margin="0 auto"
+      >
+        <TextInput
+          placeholder="Motor..."
+          label="Nome do produto"
+          {...register("name")}
+          error={errors?.name}
+        />
 
-        <Flex flex="1" m="8" flexDir="column" align="center">
-          <Heading as="h2" mb="8">
-            Cadastrar novo produto
-          </Heading>
+        <TextInput
+          type="number"
+          label="Quantidade em estoque"
+          {...register("amount")}
+          error={errors?.amount}
+        />
 
-          <Flex
-            flexDir={"column"}
-            as="form"
-            onSubmit={handleSubmit(onSubmit)}
-            borderWidth={1}
-            borderColor="gray.800"
-            borderRadius="5"
-            p="2rem"
-            w="500px"
+        <Select
+          label="Selecione a categoria"
+          {...register("categoryId")}
+          options={categories}
+        />
+
+        <Select
+          label="Selecione o armário"
+          {...register("lockerId")}
+          options={lockers}
+          onChange={handleChangeSelectedLockerData}
+        />
+
+        <Select
+          label="Selecione a porta do armário"
+          {...register("door")}
+          options={[...new Array(selectedLockerData?.numberOfDoors ?? 0)].map(
+            (_, index) => ({
+              id: index + 1,
+              name: String(index + 1),
+            })
+          )}
+          error={errors?.door}
+        />
+
+        <Select
+          label="Selecione o andar do armário"
+          {...register("floor")}
+          options={[...new Array(selectedLockerData?.numberOfFloors ?? 0)].map(
+            (_, index) => ({
+              id: index + 1,
+              name: String(index + 1),
+            })
+          )}
+          error={errors?.floor}
+        />
+
+        <HStack spacing="8" mt="12">
+          <Button
+            flex="1"
+            size="lg"
+            variant="outline"
+            onClick={() => router.back()}
           >
-            <TextInput
-              placeholder="Motor..."
-              label="Nome do produto"
-              {...register("name")}
-              error={errors?.name}
-            />
-
-            <TextInput
-              type="number"
-              label="Quantidade em estoque"
-              {...register("amount")}
-              error={errors?.amount}
-            />
-
-            <Select
-              label="Selecione a categoria"
-              {...register("categoryId")}
-              options={categories}
-            />
-
-            <Select
-              label="Selecione o armário"
-              {...register("lockerId")}
-              options={lockers}
-              onChange={handleChangeSelectedLockerData}
-            />
-
-            <Select
-              label="Selecione a porta do armário"
-              {...register("door")}
-              options={[
-                ...new Array(selectedLockerData?.numberOfDoors ?? 0),
-              ].map((_, index) => ({
-                id: index + 1,
-                name: String(index + 1),
-              }))}
-              error={errors?.door}
-            />
-
-            <Select
-              label="Selecione o andar do armário"
-              {...register("floor")}
-              options={[
-                ...new Array(selectedLockerData?.numberOfFloors ?? 0),
-              ].map((_, index) => ({
-                id: index + 1,
-                name: String(index + 1),
-              }))}
-              error={errors?.floor}
-            />
-
-            <HStack spacing="8" mt="12">
-              <Button
-                flex="1"
-                size="lg"
-                variant="outline"
-                onClick={() => router.back()}
-              >
-                Voltar
-              </Button>
-              <Button flex="1" type="submit" size="lg">
-                Criar
-              </Button>
-            </HStack>
-          </Flex>
-        </Flex>
+            Voltar
+          </Button>
+          <Button flex="1" type="submit" size="lg">
+            Criar
+          </Button>
+        </HStack>
       </Flex>
-    </Flex>
+    </Wrapper>
   );
 };
 

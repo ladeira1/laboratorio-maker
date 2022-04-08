@@ -57,19 +57,27 @@ export const Sidebar = () => {
 
   return (
     <Box
+      overflow="hidden"
       as="aside"
       w="15vw"
+      minW="300px"
       mr="8"
       bg="gray.800"
-      h="100vh"
+      h="100%"
       maxH="100vh"
-      overflow="hidden"
     >
       <Heading fontWeight="600" fontSize="2rem" as="h2" ml="6" mt="8">
         Maker
         <Icon as={SiProbot} ml="4" fontSize="24" />
       </Heading>
-      <Stack mx="6" mb="60" spacing="12" align="flex-start" h="95%">
+      <Stack
+        overflow="hidden"
+        mx="6"
+        mb="60"
+        spacing="12"
+        align="flex-start"
+        h="95%"
+      >
         <Box w="100%">
           <Stack spacing="4" mt="8" align="stretch">
             {items.map((item) => (
@@ -81,11 +89,15 @@ export const Sidebar = () => {
                     color: "gray.400",
                     fontWeight: "500",
                   }}
-                  color={router.route === item.href ? "gray.400" : "gray.500"}
+                  color={
+                    router.route.includes(item.href) ? "gray.400" : "gray.500"
+                  }
                   fontWeight="400"
                 >
                   <Flex
-                    bg={router.route === item.href ? "gray.600" : "gray.800"}
+                    bg={
+                      router.route.includes(item.href) ? "gray.600" : "gray.800"
+                    }
                     w="100%"
                     align={"center"}
                     py="3"
