@@ -1,41 +1,37 @@
-import { AspectRatio, Flex, Heading, Text } from "@chakra-ui/react";
+import { Flex } from "@chakra-ui/react";
+import { Item } from "components/Item";
+import { Wrapper } from "components/Wrapper";
 import { NextPage } from "next";
+import { LegacyRef, MutableRefObject, useRef } from "react";
 import YouTube from "react-youtube";
-import { YouTubePlayer } from 'youtube-player/dist/types';
-import { Sidebar } from "../../components/Sidebar";
+import { YouTubePlayer } from "youtube-player/dist/types";
 
 const Home: NextPage = () => {
   const onReady = ({ target }: { target: YouTubePlayer }) => {
     target.pauseVideo();
-  }
+  };
 
   return (
-    <Flex flexDir="row">
-      <Sidebar />
-      <Flex
-        flexDir="column"
-        align="flex-start"
-        px="10rem"
-        py="2rem"
-      >
-
-        <Heading as="h1" textAlign="left" mb="2rem">Cinema</Heading>
-        <Flex align="center" justify="center">
-          <YouTube
-            videoId="B530tFZNGI0"
-            opts={{
-              height: '480',
-              width: '920',
-              playerVars: {
-                autoplay: 0,
-              }
-            }}
-            onReady={onReady}
-          />
-        </Flex>
+    <Wrapper title="Cinema">
+      <Flex align="flex-start" justify="flex-start">
+        <Item>
+          {typeof window !== "undefined" && (
+            <YouTube
+              videoId="B530tFZNGI0"
+              opts={{
+                height: String(window?.innerHeight * 0.78),
+                width: String(window?.innerWidth * 0.7),
+                playerVars: {
+                  autoplay: 0,
+                },
+              }}
+              onReady={onReady}
+            />
+          )}
+        </Item>
       </Flex>
-    </Flex>
-  )
-}
+    </Wrapper>
+  );
+};
 
 export default Home;
