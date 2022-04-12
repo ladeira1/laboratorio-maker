@@ -74,7 +74,7 @@ export const SidebarNav = () => {
       </Heading>
       <Stack
         overflow="hidden"
-        ml={isDrawer ? 6 : 6}
+        ml="6"
         mr={isDrawer ? 0 : 6}
         mb="60"
         spacing="12"
