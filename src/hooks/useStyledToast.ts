@@ -39,7 +39,7 @@ export const useStyledToast = () => {
   const error = ({ error, ...rest }: UserErrorToastOptions) => {
     toast({
       ...rest,
-      description: (error as Error).response.data.error,
+      description: (error as Error)?.response.data.error ?? "",
       status: "warning",
     });
   };
