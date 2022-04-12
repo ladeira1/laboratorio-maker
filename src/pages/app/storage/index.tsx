@@ -1,20 +1,7 @@
-import {
-  Box,
-  Button,
-  Center,
-  Flex,
-  Link,
-  Spinner,
-  Table,
-  TableContainer,
-  Tbody,
-  Td,
-  Th,
-  Thead,
-  Tr,
-} from "@chakra-ui/react";
+import { Button, Center, Flex, Link, Spinner } from "@chakra-ui/react";
 import { Category, Locker, Product } from "@prisma/client";
 import { Item } from "components/Item";
+import { ListItem } from "components/ListItem";
 import { Wrapper } from "components/Wrapper";
 import { usePagination } from "hooks/usePagination";
 import NextLink from "next/link";
@@ -22,28 +9,31 @@ import React, { useState } from "react";
 import InfiniteScroll from "react-infinite-scroller";
 import { api } from "services/api";
 import { colors } from "styles/theme";
+import { getValueFromItem } from "utils/getValueFromItem";
 
-const columnNames = [
-  "Categoria",
-  "Nome",
-  "Quantidade",
-  "Armário",
-  "Porta",
-  "Andar",
+const valuesOByItem = [
+  { title: "Categoria", value: "category" },
+  { title: "Nome", value: "name" },
+  { title: "Quantidade", value: "amount" },
+  { title: "Armário", value: "locker" },
+  { title: "Porta", value: "door" },
+  { title: "Andar", value: "floor" },
 ];
 
-type ProductList = (Product & {
+type ProductDetails = Product & {
   category: Category;
   locker: Locker;
-})[];
+};
+
+type ProductDetailsList = ProductDetails[];
 
 const Storage = () => {
   const fetchProducts = async () => {
     return await api.get<{
-      products: ProductList;
+      products: ProductDetailsList;
       nextPage: number | null;
       totalPages: number;
-    }>(`/api/storage/products?page=${page}&limit=${10}`);
+    }>(`/api/storage/products?page=${page}&limit=${20}`);
   };
 
   const { page, isLoading, shouldFetchMoreData, fetchMoreData } = usePagination(
@@ -52,7 +42,7 @@ const Storage = () => {
     }
   );
 
-  const [products, setProducts] = useState<ProductList>([]);
+  const [products, setProducts] = useState<ProductDetailsList>([]);
 
   const handleFetchMoreData = async () => {
     const data = await fetchMoreData();
@@ -62,12 +52,13 @@ const Storage = () => {
   };
 
   return (
-    <Wrapper title="Produtos Em estoque">
+    <Wrapper title="Estoque">
       <Item>
         <NextLink passHref href="/app/storage/products/create">
           <Button
             as={Link}
-            w="sm"
+            w={"100%"}
+            maxW={["100%", "100%", "100%", "sm"]}
             mb="8"
             _hover={{
               textDecoration: "none",
@@ -76,11 +67,9 @@ const Storage = () => {
             Cadastrar novo produto
           </Button>
         </NextLink>
-        <TableContainer
+        <Flex
           flex="1"
-          borderWidth={1}
-          borderColor="gray.200"
-          borderRadius={10}
+          flexDir={"column"}
           overflowX="scroll"
           css={{
             scrollbarWidth: "thin",
@@ -103,39 +92,20 @@ const Storage = () => {
               loadMore={handleFetchMoreData}
               hasMore={shouldFetchMoreData}
             >
-              <Table variant="simple">
-                <Thead>
-                  <Tr>
-                    {columnNames.map((item) => (
-                      <Th
-                        key={item}
-                        borderBottomColor="gray.200"
-                        color="gray.200"
-                        fontSize="1.1rem"
-                        fontWeight="500"
-                        overflowY="hidden"
-                        h="14"
-                      >
-                        {item}
-                      </Th>
-                    ))}
-                  </Tr>
-                </Thead>
-                <Tbody>
-                  {products?.map((item) => (
-                    <Tr key={item.id}>
-                      <Td borderBottomColor="gray.600">{item.category.name}</Td>
-                      <Td borderBottomColor="gray.600">{item.name}</Td>
-                      <Td borderBottomColor="gray.600">{`${
-                        item.amount
-                      } unidade${item?.amount === 1 ? "" : "s"}`}</Td>
-                      <Td borderBottomColor="gray.600">{item.locker.name}</Td>
-                      <Td borderBottomColor="gray.600">{item.door}</Td>
-                      <Td borderBottomColor="gray.600">{item.floor}</Td>
-                    </Tr>
-                  ))}
-                </Tbody>
-              </Table>
+              <Flex maxW="100%" flexDir="column">
+                {products?.map((item) => (
+                  <ListItem
+                    key={item.id}
+                    item={{
+                      id: item.id,
+                      data: valuesOByItem.map((data) => ({
+                        title: data.title,
+                        value: getValueFromItem(data.value, item),
+                      })),
+                    }}
+                  />
+                ))}
+              </Flex>
               {isLoading && (
                 <Center h="12">
                   <Spinner color="gray.200" />
@@ -143,7 +113,7 @@ const Storage = () => {
               )}
             </InfiniteScroll>
           )}
-        </TableContainer>
+        </Flex>
       </Item>
     </Wrapper>
   );

@@ -1,24 +1,25 @@
 import {
   Box,
+  Button,
+  Flex,
+  Heading,
   Icon,
   Link,
   Stack,
   Text,
-  Heading,
-  Button,
-  Flex,
+  useBreakpointValue,
 } from "@chakra-ui/react";
+import { signOut } from "next-auth/react";
+import NextLink from "next/link";
+import { useRouter } from "next/router";
 import {
-  RiHome2Line,
   RiCalendarEventLine,
-  RiSuitcaseLine,
   RiFileInfoLine,
+  RiHome2Line,
+  RiSuitcaseLine,
   RiTvLine,
 } from "react-icons/ri";
 import { SiProbot } from "react-icons/si";
-import NextLink from "next/link";
-import { signOut } from "next-auth/react";
-import { useRouter } from "next/router";
 
 const items = [
   {
@@ -48,7 +49,8 @@ const items = [
   },
 ];
 
-export const Sidebar = () => {
+export const SidebarNav = () => {
+  const isDrawer = useBreakpointValue({ base: true, lg: false });
   const router = useRouter();
 
   const handleLogout = () => {
@@ -58,12 +60,12 @@ export const Sidebar = () => {
   return (
     <Box
       overflow="hidden"
-      as="aside"
-      w="15vw"
-      minW="300px"
-      mr="8"
+      as="nav"
+      w={isDrawer ? "100%" : "15vw"}
+      minW={isDrawer ? "0" : "300px"}
       bg="gray.800"
       h="100%"
+      px="0"
       maxH="100vh"
     >
       <Heading fontWeight="600" fontSize="2rem" as="h2" ml="6" mt="8">
@@ -72,14 +74,15 @@ export const Sidebar = () => {
       </Heading>
       <Stack
         overflow="hidden"
-        mx="6"
+        ml="6"
+        mr={isDrawer ? 0 : 6}
         mb="60"
         spacing="12"
         align="flex-start"
         h="95%"
       >
         <Box w="100%">
-          <Stack spacing="4" mt="8" align="stretch">
+          <Stack spacing="4" mt="8" align="stretch" w="100%">
             {items.map((item) => (
               <NextLink passHref href={item.href} key={item.text}>
                 <Link
