@@ -52,12 +52,13 @@ const Storage = () => {
   };
 
   return (
-    <Wrapper title="Produtos Em estoque">
+    <Wrapper title="Estoque">
       <Item>
         <NextLink passHref href="/app/storage/products/create">
           <Button
             as={Link}
-            w="sm"
+            w={"100%"}
+            maxW={["100%", "100%", "100%", "sm"]}
             mb="8"
             _hover={{
               textDecoration: "none",
