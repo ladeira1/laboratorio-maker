@@ -112,82 +112,86 @@ const CreateProduct = ({ categories, lockers }: CreateProductProps) => {
   };
 
   return (
-    <Wrapper title="Cadastrar novo produto" titleAlign="center">
-      <Flex
-        flexDir={"column"}
-        as="form"
-        onSubmit={handleSubmit(onSubmit)}
-        borderWidth={2}
-        borderColor="gray.800"
-        borderRadius="5"
-        p="2rem"
-        w="500px"
-        margin="0 auto"
-      >
-        <TextInput
-          placeholder="Motor..."
-          label="Nome do produto"
-          {...register("name")}
-          error={errors?.name}
-        />
+    <Wrapper title="Cadastrar produto" titleAlign="center">
+      <Flex minH="100%">
+        <Flex
+          flexDir={"column"}
+          as="form"
+          onSubmit={handleSubmit(onSubmit)}
+          borderWidth={2}
+          borderColor="gray.800"
+          borderRadius="5"
+          p="2rem"
+          w="100%"
+          maxW="500px"
+          margin="0 auto"
+          overflowY={"scroll"}
+        >
+          <TextInput
+            placeholder="Motor..."
+            label="Nome do produto"
+            {...register("name")}
+            error={errors?.name}
+          />
 
-        <TextInput
-          type="number"
-          label="Quantidade em estoque"
-          {...register("amount")}
-          error={errors?.amount}
-        />
+          <TextInput
+            type="number"
+            label="Quantidade em estoque"
+            {...register("amount")}
+            error={errors?.amount}
+          />
 
-        <Select
-          label="Selecione a categoria"
-          {...register("categoryId")}
-          options={categories}
-        />
+          <Select
+            label="Selecione a categoria"
+            {...register("categoryId")}
+            options={categories}
+          />
 
-        <Select
-          label="Selecione o armário"
-          {...register("lockerId")}
-          options={lockers}
-          onChange={handleChangeSelectedLockerData}
-        />
+          <Select
+            label="Selecione o armário"
+            {...register("lockerId")}
+            options={lockers}
+            onChange={handleChangeSelectedLockerData}
+          />
 
-        <Select
-          label="Selecione a porta do armário"
-          {...register("door")}
-          options={[...new Array(selectedLockerData?.numberOfDoors ?? 0)].map(
-            (_, index) => ({
+          <Select
+            label="Selecione a porta do armário"
+            {...register("door")}
+            options={[...new Array(selectedLockerData?.numberOfDoors ?? 0)].map(
+              (_, index) => ({
+                id: index + 1,
+                name: String(index + 1),
+              })
+            )}
+            error={errors?.door}
+          />
+
+          <Select
+            label="Selecione o andar do armário"
+            {...register("floor")}
+            options={[
+              ...new Array(selectedLockerData?.numberOfFloors ?? 0),
+            ].map((_, index) => ({
               id: index + 1,
               name: String(index + 1),
-            })
-          )}
-          error={errors?.door}
-        />
+            }))}
+            error={errors?.floor}
+          />
 
-        <Select
-          label="Selecione o andar do armário"
-          {...register("floor")}
-          options={[...new Array(selectedLockerData?.numberOfFloors ?? 0)].map(
-            (_, index) => ({
-              id: index + 1,
-              name: String(index + 1),
-            })
-          )}
-          error={errors?.floor}
-        />
-
-        <HStack spacing="8" mt="12">
-          <Button
-            flex="1"
-            size="lg"
-            variant="outline"
-            onClick={() => router.back()}
-          >
-            Voltar
-          </Button>
-          <Button flex="1" type="submit" size="lg">
-            Criar
-          </Button>
-        </HStack>
+          <HStack spacing="8" mt={["2", "8"]}>
+            <Button
+              flex="1"
+              size="lg"
+              variant="outline"
+              onClick={() => router.back()}
+            >
+              Voltar
+            </Button>
+            <Button flex="1" type="submit" size="lg">
+              Criar
+            </Button>
+          </HStack>
+        </Flex>
       </Flex>
     </Wrapper>
   );
