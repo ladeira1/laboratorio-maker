@@ -1,13 +1,11 @@
 import { Flex } from "@chakra-ui/react";
-import { Sidebar } from "components/Sidebar";
+import { Wrapper } from "../../components/Wrapper";
 
 const Dashboard = () => {
   return (
-    <Flex direction="column" h="100vh">
-      <Flex w="100vw">
-        <Sidebar />
-      </Flex>
-    </Flex>
+    <Wrapper title="Dashboard">
+      <Flex />
+    </Wrapper>
   );
 };
 

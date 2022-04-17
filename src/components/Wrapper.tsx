@@ -30,10 +30,11 @@ export const Wrapper = ({
   return (
     <Flex direction="row" h="100vh" maxW="100vw" maxH="100vh" p="0" m="0">
       <Sidebar />
-      <Flex flex="1" p="8" flexDir="column" position="relative">
+      <Flex flex="1" p={["4", "4", "8"]} flexDir="column" position="relative">
         <HStack justify="center">
           {isDrawer && (
             <Button
+              flex="1"
               height="100%"
               variant="unstyled"
               onClick={onOpen}
@@ -50,7 +51,7 @@ export const Wrapper = ({
             <Heading
               flex="1"
               as="h1"
-              fontSize="2rem"
+              fontSize={["1.4rem", "1.6rem", "2rem"]}
               textAlign={isDrawer ? "center" : titleAlign}
             >
               {title}
@@ -59,7 +60,7 @@ export const Wrapper = ({
         </HStack>
         <Flex
           flexDir="column"
-          mt="8"
+          mt={["4", "4", "8"]}
           w="100%"
           overflowY="scroll"
           css={{
