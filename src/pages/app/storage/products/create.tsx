@@ -6,7 +6,6 @@ import { useSession } from "next-auth/react";
 import React from "react";
 import { SubmitHandler } from "react-hook-form";
 import { productRequests } from "requests/product";
-import { api } from "services/api";
 import { prisma } from "services/prisma";
 import superjson from "superjson";
 import { ProductValues } from "types";

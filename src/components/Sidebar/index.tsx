@@ -12,7 +12,7 @@ export const Sidebar = () => {
   }
 
   return (
-    <Box as="aside" w="64" mr="8">
+    <Box as="aside" w="64" mr="8" h="100vh">
       <SidebarNav />
     </Box>
   );
