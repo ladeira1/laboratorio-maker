@@ -1,10 +1,10 @@
-import { NextApiRequest, NextApiResponse } from "next";
-import { prisma } from "services/prisma";
-import { updateProductValidator } from "validators/storage/products/update";
+import { NextApiRequest, NextApiResponse } from 'next';
+import { prisma } from 'services/prisma';
+import { updateProductValidator } from 'validators/storage/products/update';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
-    if (req.method === "PUT") {
+    if (req.method === 'PUT') {
       const { pid } = req.query;
       const {
         name,
@@ -34,9 +34,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       });
 
       return res.status(200).json({ product });
-    } else {
-      return res.status(400).json({ error: "Invalid request" });
     }
+    return res.status(400).json({ error: 'Invalid request' });
   } catch (error) {
     return res.status(400).json({ error: (error as Error)?.message ?? error });
   }

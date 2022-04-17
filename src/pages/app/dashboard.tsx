@@ -1,12 +1,11 @@
-import { Flex } from "@chakra-ui/react";
-import { Wrapper } from "../../components/Wrapper";
+import { Flex } from '@chakra-ui/react';
+import React from 'react';
+import { Wrapper } from '../../components/Wrapper';
 
-const Dashboard = () => {
-  return (
-    <Wrapper title="Dashboard">
-      <Flex />
-    </Wrapper>
-  );
-};
+const Dashboard = () => (
+  <Wrapper title="Dashboard">
+    <Flex />
+  </Wrapper>
+);
 
 export default Dashboard;

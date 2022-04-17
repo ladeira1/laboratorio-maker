@@ -1,10 +1,10 @@
-import { NextApiRequest, NextApiResponse } from "next";
-import { prisma } from "services/prisma";
-import { createProductValidator } from "validators/storage/products/create";
+import { NextApiRequest, NextApiResponse } from 'next';
+import { prisma } from 'services/prisma';
+import { createProductValidator } from 'validators/storage/products/create';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
-    if (req.method === "POST") {
+    if (req.method === 'POST') {
       const { name, amount, door, floor, categoryId, lockerId, createdBy } =
         req.body;
 
@@ -23,9 +23,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       });
 
       return res.status(201).json({ product });
-    } else {
-      return res.status(400).json({ error: "Invalid request" });
     }
+    return res.status(400).json({ error: 'Invalid request' });
   } catch (error) {
     return res.status(400).json({ error: (error as Error)?.message ?? error });
   }

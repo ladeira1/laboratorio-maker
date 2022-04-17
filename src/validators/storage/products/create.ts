@@ -1,14 +1,14 @@
-import { NextApiRequest } from "next";
-import { prisma } from "services/prisma";
-import * as yup from "yup";
+import { NextApiRequest } from 'next';
+import { prisma } from 'services/prisma';
+import * as yup from 'yup';
 
 const schema = yup.object({
-  name: yup.string().required("Campo obrigatório"),
+  name: yup.string().required('Campo obrigatório'),
   amount: yup
     .number()
-    .typeError("Você precisa informar um número")
-    .integer("A quantidade informada precisa ser um número inteiro")
-    .required("Campo obrigatório"),
+    .typeError('Você precisa informar um número')
+    .integer('A quantidade informada precisa ser um número inteiro')
+    .required('Campo obrigatório'),
 });
 
 export const createProductValidator = async (req: NextApiRequest) => {
@@ -19,7 +19,7 @@ export const createProductValidator = async (req: NextApiRequest) => {
       .validate(req.body, {
         abortEarly: true,
       })
-      .catch((err) => {
+      .catch(err => {
         throw new Error(err);
       });
   }
@@ -27,21 +27,24 @@ export const createProductValidator = async (req: NextApiRequest) => {
   const product = await prisma.product.findFirst({
     where: { name, categoryId },
   });
-  if (product) throw new Error("Este produto já existe");
+
+  if (product) throw new Error('Este produto já existe');
 
   const category = await prisma.category.findFirst({
     where: { id: categoryId },
   });
-  if (!category) throw new Error("Categoria não encontrada");
+
+  if (!category) throw new Error('Categoria não encontrada');
 
   const locker = await prisma.locker.findFirst({ where: { id: lockerId } });
-  if (!locker) throw new Error("Armário não encontrado");
+
+  if (!locker) throw new Error('Armário não encontrado');
 
   if (locker.numberOfDoors < door) {
-    throw new Error("A porta informada não existe");
+    throw new Error('A porta informada não existe');
   }
 
   if (locker.numberOfFloors < floor) {
-    throw new Error("O andar informado não existe");
+    throw new Error('O andar informado não existe');
   }
 };

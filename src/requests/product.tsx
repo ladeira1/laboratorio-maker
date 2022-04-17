@@ -1,9 +1,9 @@
-import { Product } from "@prisma/client";
-import { api } from "services/api";
-import { ProductDetailsList, ProductValues } from "types";
+import { Product } from '@prisma/client';
+import { api } from 'services/api';
+import { ProductDetailsList, ProductValues } from 'types';
 
 const list = async ({ page }: ProductList) => {
-  return await api.get<{
+  return api.get<{
     products: ProductDetailsList;
     nextPage: number | null;
     totalPages: number;
@@ -11,7 +11,7 @@ const list = async ({ page }: ProductList) => {
 };
 
 const create = async (data: ProductValues) => {
-  await api.post("/api/storage/products/create", data);
+  await api.post('/api/storage/products/create', data);
 };
 
 const update = async (data: Product) => {

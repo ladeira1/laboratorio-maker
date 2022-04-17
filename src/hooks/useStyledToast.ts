@@ -1,4 +1,4 @@
-import { useToast, UseToastOptions } from "@chakra-ui/react";
+import { useToast, UseToastOptions } from '@chakra-ui/react';
 
 interface Error {
   response: {
@@ -6,7 +6,7 @@ interface Error {
   };
 }
 
-type UserErrorToastOptions = Omit<UseToastOptions, "description"> & {
+type UserErrorToastOptions = Omit<UseToastOptions, 'description'> & {
   error: Error | unknown;
 };
 
@@ -15,10 +15,10 @@ export const useStyledToast = () => {
 
   const toast = ({
     description,
-    status = "success",
+    status = 'success',
     isClosable = true,
     duration = 3000,
-    position = "top-right",
+    position = 'top-right',
   }: UseToastOptions) => {
     defaultToast({
       description,
@@ -32,15 +32,15 @@ export const useStyledToast = () => {
   const success = (options: UseToastOptions) => {
     toast({
       ...options,
-      status: "success",
+      status: 'success',
     });
   };
 
-  const error = ({ error, ...rest }: UserErrorToastOptions) => {
+  const error = ({ error: message, ...rest }: UserErrorToastOptions) => {
     toast({
       ...rest,
-      description: (error as Error)?.response.data.error ?? "",
-      status: "warning",
+      description: (message as Error)?.response.data.error ?? '',
+      status: 'warning',
     });
   };
 

@@ -1,6 +1,6 @@
-import { AxiosResponse } from "axios";
-import { useState } from "react";
-import { useStyledToast } from "./useStyledToast";
+import { AxiosResponse } from 'axios';
+import { useState } from 'react';
+import { useStyledToast } from './useStyledToast';
 
 interface UsePaginationProps {
   request: () => Promise<AxiosResponse<Record<string, any>, any>>;
@@ -33,6 +33,8 @@ export const usePagination = ({ request }: UsePaginationProps) => {
       setHasError(true);
       errorToast({ error: err });
     }
+
+    return undefined;
   };
 
   return {

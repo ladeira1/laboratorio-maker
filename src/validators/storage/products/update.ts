@@ -1,18 +1,18 @@
-import { NextApiRequest } from "next";
-import { prisma } from "services/prisma";
-import * as yup from "yup";
+import { NextApiRequest } from 'next';
+import { prisma } from 'services/prisma';
+import * as yup from 'yup';
 
 const schema = yup.object({
-  name: yup.string().typeError("Nome inválido"),
+  name: yup.string().typeError('Nome inválido'),
   amount: yup
     .number()
-    .typeError("Você precisa informar um número")
-    .integer("A quantidade informada precisa ser um número inteiro"),
+    .typeError('Você precisa informar um número')
+    .integer('A quantidade informada precisa ser um número inteiro'),
   pid: yup
     .number()
-    .typeError("Produto inválido")
-    .integer("Produto inválido")
-    .required("Produto inválido"),
+    .typeError('Produto inválido')
+    .integer('Produto inválido')
+    .required('Produto inválido'),
 });
 
 export const updateProductValidator = async (req: NextApiRequest) => {
@@ -24,9 +24,9 @@ export const updateProductValidator = async (req: NextApiRequest) => {
         { ...req.body, ...req.query },
         {
           abortEarly: true,
-        }
+        },
       )
-      .catch((err) => {
+      .catch(err => {
         throw new Error(err);
       });
   }
@@ -34,21 +34,24 @@ export const updateProductValidator = async (req: NextApiRequest) => {
   const product = await prisma.product.findUnique({
     where: { id: Number(req.query.pid) },
   });
-  if (!product) throw new Error("Este produto não existe");
+
+  if (!product) throw new Error('Este produto não existe');
 
   const category = await prisma.category.findUnique({
     where: { id: categoryId },
   });
-  if (!category) throw new Error("Categoria não encontrada");
+
+  if (!category) throw new Error('Categoria não encontrada');
 
   const locker = await prisma.locker.findUnique({ where: { id: lockerId } });
-  if (!locker) throw new Error("Armário não encontrado");
+
+  if (!locker) throw new Error('Armário não encontrado');
 
   if (locker.numberOfDoors < door) {
-    throw new Error("A porta informada não existe");
+    throw new Error('A porta informada não existe');
   }
 
   if (locker.numberOfFloors < floor) {
-    throw new Error("O andar informado não existe");
+    throw new Error('O andar informado não existe');
   }
 };

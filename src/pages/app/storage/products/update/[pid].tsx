@@ -1,16 +1,15 @@
-import { Category, Locker, Product } from "@prisma/client";
-import { ProductForm } from "components/Form/ProductForm";
-import { Wrapper } from "components/Wrapper";
-import { useStyledToast } from "hooks/useStyledToast";
-import { GetServerSideProps } from "next";
-import { useSession } from "next-auth/react";
-import React from "react";
-import { SubmitHandler } from "react-hook-form";
-import { productRequests } from "requests/product";
-import { api } from "services/api";
-import { prisma } from "services/prisma";
-import superjson from "superjson";
-import { ProductValues } from "types";
+import { Category, Locker, Product } from '@prisma/client';
+import { ProductForm } from 'components/Form/ProductForm';
+import { Wrapper } from 'components/Wrapper';
+import { useStyledToast } from 'hooks/useStyledToast';
+import { GetServerSideProps } from 'next';
+import { useSession } from 'next-auth/react';
+import React from 'react';
+import { SubmitHandler } from 'react-hook-form';
+import { productRequests } from 'requests/product';
+import { prisma } from 'services/prisma';
+import superjson from 'superjson';
+import { ProductValues } from 'types';
 
 interface UpdateProductProps {
   product: Product;
@@ -27,16 +26,16 @@ const UpdateProduct = ({
 
   const { success, error } = useStyledToast();
 
-  const handleSubmit: SubmitHandler<ProductValues> = async (data) => {
+  const handleSubmit: SubmitHandler<ProductValues> = async data => {
     try {
       await productRequests.update({
         ...data,
         id: product.id,
-        updatedBy: session.data?.user!.email!,
+        updatedBy: session.data?.user?.email as string,
       });
 
       success({
-        description: "Produto atualizado com sucesso",
+        description: 'Produto atualizado com sucesso',
       });
     } catch (err) {
       error({
@@ -57,12 +56,13 @@ const UpdateProduct = ({
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
+export const getServerSideProps: GetServerSideProps = async context => {
   const { pid } = context.query;
+
   if (!pid) {
     return {
       redirect: {
-        destination: "/app/storage/products",
+        destination: '/app/storage/products',
         permanent: false,
       },
     };
