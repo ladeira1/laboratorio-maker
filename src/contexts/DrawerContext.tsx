@@ -1,7 +1,7 @@
 /* eslint-disable react/jsx-no-constructed-context-values */
 import { useDisclosure } from '@chakra-ui/hooks';
 import { useRouter } from 'next/dist/client/router';
-import React, { createContext, ReactNode, useEffect, useMemo } from 'react';
+import React, { createContext, ReactNode, useEffect } from 'react';
 
 interface DrawerProviderProps {
   children: ReactNode;
