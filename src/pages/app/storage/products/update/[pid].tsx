@@ -1,6 +1,7 @@
-import { Category, Locker } from "@prisma/client";
+import { Category, Locker, Product } from "@prisma/client";
 import { ProductForm } from "components/Form/ProductForm";
 import { Wrapper } from "components/Wrapper";
+import { useStyledToast } from "hooks/useStyledToast";
 import { GetServerSideProps } from "next";
 import { useSession } from "next-auth/react";
 import React from "react";
@@ -10,27 +11,32 @@ import { api } from "services/api";
 import { prisma } from "services/prisma";
 import superjson from "superjson";
 import { ProductValues } from "types";
-import { useStyledToast } from "../../../../hooks/useStyledToast";
 
-interface CreateProductProps {
+interface UpdateProductProps {
+  product: Product;
   categories: Category[];
   lockers: Locker[];
 }
 
-const CreateProduct = ({ categories, lockers }: CreateProductProps) => {
+const UpdateProduct = ({
+  product,
+  categories,
+  lockers,
+}: UpdateProductProps) => {
   const session = useSession();
 
   const { success, error } = useStyledToast();
 
   const handleSubmit: SubmitHandler<ProductValues> = async (data) => {
     try {
-      await productRequests.create({
+      await productRequests.update({
         ...data,
-        createdBy: session.data?.user!.email!,
+        id: product.id,
+        updatedBy: session.data?.user!.email!,
       });
 
       success({
-        description: "Produto criado com sucesso",
+        description: "Produto atualizado com sucesso",
       });
     } catch (err) {
       error({
@@ -40,26 +46,41 @@ const CreateProduct = ({ categories, lockers }: CreateProductProps) => {
   };
 
   return (
-    <Wrapper title="Cadastrar novo produto" titleAlign="center">
+    <Wrapper title="Atualizar produto" titleAlign="center">
       <ProductForm
         categories={categories}
         lockers={lockers}
+        initialValues={product}
         onSubmit={handleSubmit}
       />
     </Wrapper>
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async () => {
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const { pid } = context.query;
+  if (!pid) {
+    return {
+      redirect: {
+        destination: "/app/storage/products",
+        permanent: false,
+      },
+    };
+  }
+
   const category = await prisma.category.findMany();
   const lockers = await prisma.locker.findMany();
+  const product = await prisma.product.findUnique({
+    where: { id: Number(pid) },
+  });
 
   return {
     props: {
       categories: superjson.serialize(category).json,
       lockers: superjson.serialize(lockers).json,
+      product: superjson.serialize(product).json,
     },
   };
 };
 
-export default CreateProduct;
+export default UpdateProduct;

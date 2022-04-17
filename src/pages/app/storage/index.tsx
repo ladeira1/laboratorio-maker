@@ -5,10 +5,13 @@ import { ListItem } from "components/ListItem";
 import { Wrapper } from "components/Wrapper";
 import { usePagination } from "hooks/usePagination";
 import NextLink from "next/link";
+import { useRouter } from "next/router";
 import React, { useState } from "react";
 import InfiniteScroll from "react-infinite-scroller";
+import { productRequests } from "requests/product";
 import { api } from "services/api";
 import { colors } from "styles/theme";
+import { ProductDetailsList } from "types";
 import { getValueFromItem } from "utils/getValueFromItem";
 
 const valuesOByItem = [
@@ -20,25 +23,12 @@ const valuesOByItem = [
   { title: "Andar", value: "floor" },
 ];
 
-type ProductDetails = Product & {
-  category: Category;
-  locker: Locker;
-};
-
-type ProductDetailsList = ProductDetails[];
-
 const Storage = () => {
-  const fetchProducts = async () => {
-    return await api.get<{
-      products: ProductDetailsList;
-      nextPage: number | null;
-      totalPages: number;
-    }>(`/api/storage/products?page=${page}&limit=${20}`);
-  };
+  const router = useRouter();
 
   const { page, isLoading, shouldFetchMoreData, fetchMoreData } = usePagination(
     {
-      request: fetchProducts,
+      request: () => productRequests.list({ page }),
     }
   );
 
@@ -49,6 +39,10 @@ const Storage = () => {
     if (!data) return;
 
     setProducts((oldState) => [...oldState, ...data.products]);
+  };
+
+  const handleUpdateSelectedProduct = (id: string | number) => {
+    router.push(`/app/storage/products/update/${id}`);
   };
 
   return (
@@ -103,6 +97,7 @@ const Storage = () => {
                         value: getValueFromItem(data.value, item),
                       })),
                     }}
+                    onClick={handleUpdateSelectedProduct}
                   />
                 ))}
               </Flex>

@@ -1,17 +1,13 @@
-import { forwardRef, ForwardRefRenderFunction } from "react";
 import {
+  Box,
   FormControl,
-  Text,
+  FormErrorMessage,
   Select as ChakraSelect,
   SelectProps as ChakraSelectProps,
-  Tooltip,
-  FormErrorMessage,
-  Icon,
-  Input,
-  Box,
+  Text,
 } from "@chakra-ui/react";
+import { forwardRef, ForwardRefRenderFunction } from "react";
 import { FieldError } from "react-hook-form";
-import { FiAlertCircle } from "react-icons/fi";
 
 interface SelectProps extends ChakraSelectProps {
   label?: string;
