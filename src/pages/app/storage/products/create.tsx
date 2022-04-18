@@ -39,7 +39,7 @@ const CreateProduct = ({ categories, lockers }: CreateProductProps) => {
   };
 
   return (
-    <Wrapper title="Cadastrar novo produto" titleAlign="center">
+    <Wrapper title="Cadastrar produto" titleAlign="center">
       <ProductForm
         categories={categories}
         lockers={lockers}

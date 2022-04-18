@@ -101,7 +101,8 @@ export const ProductForm = ({
       borderColor="gray.800"
       borderRadius="5"
       p="2rem"
-      w="500px"
+      w="100%"
+      maxW="500px"
       margin="0 auto"
     >
       <TextInput
@@ -155,7 +156,7 @@ export const ProductForm = ({
         error={errors?.floor}
       />
 
-      <HStack spacing="8" mt="12">
+      <HStack spacing="8" mt={['4', '12']}>
         <Button
           flex="1"
           size="lg"
