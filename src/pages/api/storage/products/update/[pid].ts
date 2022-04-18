@@ -1,16 +1,26 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { prisma } from 'services/prisma';
-import { createProductValidator } from 'validators/storage/products/create';
+import { updateProductValidator } from 'validators/storage/products/update';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
-    if (req.method === 'POST') {
-      const { name, amount, door, floor, categoryId, lockerId, createdBy } =
-        req.body;
+    if (req.method === 'PUT') {
+      const { pid } = req.query;
+      const {
+        name,
+        amount,
+        door,
+        floor,
+        categoryId,
+        lockerId,
+        createdBy,
+        updatedBy,
+      } = req.body;
 
-      await createProductValidator(req);
+      await updateProductValidator(req);
 
-      const product = await prisma.product.create({
+      const product = await prisma.product.update({
+        where: { id: Number(pid) },
         data: {
           name,
           amount,
@@ -19,10 +29,11 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
           categoryId,
           lockerId,
           createdBy,
+          updatedBy,
         },
       });
 
-      return res.status(201).json({ product });
+      return res.status(200).json({ product });
     }
     return res.status(400).json({ error: 'Invalid request' });
   } catch (error) {

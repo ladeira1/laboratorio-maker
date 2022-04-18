@@ -1,5 +1,5 @@
-import { Flex, Stack, Text } from "@chakra-ui/react";
-import React from "react";
+import { Flex, Stack, Text } from '@chakra-ui/react';
+import React from 'react';
 
 interface Item {
   id: string | number;
@@ -11,9 +11,14 @@ interface Item {
 
 interface ListItemProps {
   item: Item;
+  onClick?: (id: string | number) => void;
 }
 
-export const ListItem = ({ item }: ListItemProps) => {
+export const ListItem = ({ item, onClick }: ListItemProps) => {
+  const handleClick = () => {
+    if (onClick) onClick(item.id);
+  };
+
   return (
     <Flex
       flex="1"
@@ -28,16 +33,17 @@ export const ListItem = ({ item }: ListItemProps) => {
       flexWrap="wrap"
       as="button"
       _hover={{
-        filter: "brightness(130%)",
+        filter: 'brightness(130%)',
       }}
       transition="filter ease 0.2s"
+      onClick={handleClick}
     >
-      {item.data.map((data) => (
+      {item.data.map(data => (
         <Stack key={data.title} spacing="0" flex="1" m="4" align="flex-start">
           <Text fontSize="1rem" color="gray.500">
             {data.title}
           </Text>
-          <Text fontSize="1.1rem" fontWeight="500">
+          <Text fontSize="1.1rem" fontWeight="500" textAlign="left">
             {data.value}
           </Text>
         </Stack>

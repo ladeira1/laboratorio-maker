@@ -1,7 +1,7 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import { useDisclosure } from "@chakra-ui/hooks";
-import { useRouter } from "next/dist/client/router";
-import { createContext, ReactNode, useEffect } from "react";
+/* eslint-disable react/jsx-no-constructed-context-values */
+import { useDisclosure } from '@chakra-ui/hooks';
+import { useRouter } from 'next/dist/client/router';
+import React, { createContext, ReactNode, useEffect } from 'react';
 
 interface DrawerProviderProps {
   children: ReactNode;
@@ -14,7 +14,7 @@ interface SibebarDrawerContextData {
 }
 
 export const SidebarDrawerContext = createContext(
-  {} as SibebarDrawerContextData
+  {} as SibebarDrawerContextData,
 );
 
 export const DrawerProvider = ({ children }: DrawerProviderProps) => {
