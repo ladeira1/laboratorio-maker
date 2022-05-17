@@ -18,6 +18,10 @@ const update = async (data: Product) => {
   await api.put(`/api/storage/products/update/${data.id}`, data);
 };
 
+const remove = async (id: string | number) => {
+  await api.delete(`/api/storage/products/delete/${id}`);
+};
+
 interface ProductList {
   page: number | null;
 }
@@ -26,4 +30,5 @@ export const productRequests = {
   list,
   create,
   update,
+  remove,
 };
