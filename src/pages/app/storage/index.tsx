@@ -1,65 +1,16 @@
-import { Button, Center, Flex, Link, Spinner } from '@chakra-ui/react';
+import { Button, Flex, Link } from '@chakra-ui/react';
 import { Item } from 'components/Item';
-import { ListItem } from 'components/ListItem';
 import { Wrapper } from 'components/Wrapper';
-import { usePagination } from 'hooks/usePagination';
 import NextLink from 'next/link';
-import { useRouter } from 'next/router';
-import React, { useState } from 'react';
-import InfiniteScroll from 'react-infinite-scroller';
-import { productRequests } from 'requests/product';
+import React from 'react';
 import { colors } from 'styles/theme';
-import { ProductDetailsList } from 'types';
-import { getValueFromItem } from 'utils/getValueFromItem';
 
-const valuesOByItem = [
-  { title: 'Categoria', value: 'category' },
-  { title: 'Nome', value: 'name' },
-  { title: 'Quantidade', value: 'amount' },
-  { title: 'Armário', value: 'locker' },
-  { title: 'Porta', value: 'door' },
-  { title: 'Andar', value: 'floor' },
-];
+const pages = [{ title: 'Produtos', value: 'products' }];
 
 const Storage = () => {
-  const router = useRouter();
-
-  const { page, isLoading, shouldFetchMoreData, fetchMoreData } = usePagination(
-    {
-      request: () => productRequests.list({ page }),
-    },
-  );
-
-  const [products, setProducts] = useState<ProductDetailsList>([]);
-
-  const handleFetchMoreData = async () => {
-    const data = await fetchMoreData();
-
-    if (!data) return;
-
-    setProducts(oldState => [...oldState, ...data.products]);
-  };
-
-  const handleUpdateSelectedProduct = (id: string | number) => {
-    router.push(`/app/storage/products/update/${id}`);
-  };
-
   return (
     <Wrapper title="Estoque">
       <Item>
-        <NextLink passHref href="/app/storage/products/create">
-          <Button
-            as={Link}
-            w="100%"
-            maxW={['100%', '100%', '100%', 'sm']}
-            mb="8"
-            _hover={{
-              textDecoration: 'none',
-            }}
-          >
-            Cadastrar novo produto
-          </Button>
-        </NextLink>
         <Flex
           flex="1"
           flexDir="column"
@@ -79,34 +30,22 @@ const Storage = () => {
             },
           }}
         >
-          {products && (
-            <InfiniteScroll
-              pageStart={1}
-              loadMore={handleFetchMoreData}
-              hasMore={shouldFetchMoreData}
-            >
-              <Flex maxW="100%" flexDir="column">
-                {products?.map(item => (
-                  <ListItem
-                    key={item.id}
-                    item={{
-                      id: item.id,
-                      data: valuesOByItem.map(data => ({
-                        title: data.title,
-                        value: getValueFromItem(data.value, item),
-                      })),
-                    }}
-                    onClick={handleUpdateSelectedProduct}
-                  />
-                ))}
-              </Flex>
-              {isLoading && (
-                <Center h="12">
-                  <Spinner color="gray.200" />
-                </Center>
-              )}
-            </InfiniteScroll>
-          )}
+          <Flex maxW="100%" flexDir="column">
+            {pages?.map(page => (
+              <NextLink passHref href="/app/storage/products">
+                <Button
+                  variant="link"
+                  as={Link}
+                  w="100%"
+                  minH="8rem"
+                  maxW={['100%', 'sm']}
+                  mb="8"
+                >
+                  {page.title}
+                </Button>
+              </NextLink>
+            ))}
+          </Flex>
         </Flex>
       </Item>
     </Wrapper>

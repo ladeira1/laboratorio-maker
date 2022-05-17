@@ -94,6 +94,23 @@ const Button: ComponentStyleConfig = {
         opacity: 1,
       },
     },
+    link: {
+      bg: 'gray.700',
+      color: 'gray.200',
+      fontSize: '1.3rem',
+      fontWeight: 500,
+      shadow: '2xl',
+      borderRadius: '1rem',
+      _hover: {
+        textDecoration: 'none',
+        bg: 'gray.700',
+        opacity: 0.8,
+      },
+      _active: {
+        bg: 'gray.700',
+        opacity: 0.8,
+      },
+    },
   },
   defaultProps: {
     size: 'md',
