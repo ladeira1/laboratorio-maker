@@ -44,6 +44,11 @@ const Products = () => {
     router.push(`/app/storage/products/update/${id}`);
   };
 
+  const handleDeleteSelectedProduct = async (id: string | number) => {
+    await productRequests.remove(id);
+    setProducts(oldState => oldState.filter(product => product.id !== id));
+  };
+
   return (
     <Wrapper title="Produtos">
       <Item>
@@ -97,6 +102,7 @@ const Products = () => {
                       })),
                     }}
                     onClick={handleUpdateSelectedProduct}
+                    onDelete={handleDeleteSelectedProduct}
                   />
                 ))}
               </Flex>

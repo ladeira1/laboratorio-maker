@@ -40,6 +40,11 @@ const Categories = () => {
     router.push(`/app/storage/categories/update/${id}`);
   };
 
+  const handleDeleteSelectedCategory = async (id: string | number) => {
+    await categoryRequests.remove(id);
+    setCategories(oldState => oldState.filter(category => category.id !== id));
+  };
+
   return (
     <Wrapper title="Categorias">
       <Item>
@@ -93,6 +98,7 @@ const Categories = () => {
                       })),
                     }}
                     onClick={handleUpdateSelectedCategory}
+                    onDelete={handleDeleteSelectedCategory}
                   />
                 ))}
               </Flex>

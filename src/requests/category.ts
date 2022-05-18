@@ -9,10 +9,15 @@ const list = async ({ page }: CategoryList) => {
   }>(`/api/storage/categories?page=${page}&limit=${20}`);
 };
 
+const remove = async (id: string | number) => {
+  await api.delete(`/api/storage/categories/delete/${id}`);
+};
+
 interface CategoryList {
   page: number | null;
 }
 
 export const categoryRequests = {
   list,
+  remove,
 };

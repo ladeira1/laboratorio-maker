@@ -1,15 +1,15 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { prisma } from 'services/prisma';
-import { deleteProductValidator } from 'validators/storage/products/delete';
+import { deleteCategoryValidator } from 'validators/storage/categories/delete';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     if (req.method === 'DELETE') {
       const { pid } = req.query;
 
-      await deleteProductValidator(req);
+      await deleteCategoryValidator(req);
 
-      await prisma.product.delete({
+      await prisma.category.delete({
         where: { id: Number(pid) },
       });
 
