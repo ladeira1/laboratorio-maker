@@ -5,7 +5,10 @@ import NextLink from 'next/link';
 import React from 'react';
 import { colors } from 'styles/theme';
 
-const pages = [{ title: 'Produtos', value: 'products' }];
+const pages = [
+  { title: 'Produtos', value: 'products' },
+  { title: 'Categorias', value: 'categories' },
+];
 
 const Storage = () => {
   return (
@@ -32,7 +35,7 @@ const Storage = () => {
         >
           <Flex maxW="100%" flexDir="column">
             {pages?.map(page => (
-              <NextLink passHref href="/app/storage/products">
+              <NextLink passHref href={`/app/storage/${page.value}`}>
                 <Button
                   variant="link"
                   as={Link}

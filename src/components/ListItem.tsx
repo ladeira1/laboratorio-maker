@@ -47,28 +47,34 @@ export const ListItem = ({ item, onClick, onDelete }: ListItemProps) => {
       onClick={handleClick}
     >
       {item.data.map(data => (
-        <Stack
-          key={data.title}
-          spacing="0"
-          flex="1"
-          m="4"
-          align="flex-start"
-          justify="center"
-        >
-          <Text fontSize="1rem" color="gray.500">
-            {data.title}
-          </Text>
-          <Text fontSize="1.1rem" fontWeight="500" textAlign="left">
-            {data.value}
-          </Text>
-        </Stack>
+        <>
+          {data?.value && (
+            <Stack
+              key={data.title}
+              spacing="0"
+              flex="1"
+              m="4"
+              align="flex-start"
+              justify="center"
+            >
+              <Text fontSize="1rem" color="gray.500">
+                {data.title}
+              </Text>
+              <Text fontSize="1.1rem" fontWeight="500" textAlign="left">
+                {data.value}
+              </Text>
+            </Stack>
+          )}
+        </>
       ))}
 
-      <Center minHeight="100%">
-        <Button variant="unstyled" display="flex" onClick={handleDelete}>
-          <FiX fontSize="1.5rem" />
-        </Button>
-      </Center>
+      {!!onDelete && (
+        <Center minHeight="100%">
+          <Button variant="unstyled" display="flex" onClick={handleDelete}>
+            <FiX fontSize="1.5rem" />
+          </Button>
+        </Center>
+      )}
     </Flex>
   );
 };

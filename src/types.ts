@@ -7,3 +7,5 @@ export type ProductDetails = Product & {
 };
 
 export type ProductDetailsList = ProductDetails[];
+
+export type CategoryList = Category[];
