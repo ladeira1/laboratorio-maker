@@ -1,3 +1,4 @@
+import { Category } from '@prisma/client';
 import { api } from 'services/api';
 import { CategoryValues, ProductDetailsList } from 'types';
 
@@ -13,6 +14,10 @@ const create = async (data: CategoryValues) => {
   await api.post('/api/storage/categories/create', data);
 };
 
+const update = async (data: Category) => {
+  await api.put(`/api/storage/categories/update/${data.id}`, data);
+};
+
 const remove = async (id: string | number) => {
   await api.delete(`/api/storage/categories/delete/${id}`);
 };
@@ -24,5 +29,6 @@ interface CategoryList {
 export const categoryRequests = {
   list,
   create,
+  update,
   remove,
 };
