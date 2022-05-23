@@ -1,5 +1,5 @@
 import { api } from 'services/api';
-import { ProductDetailsList } from 'types';
+import { CategoryValues, ProductDetailsList } from 'types';
 
 const list = async ({ page }: CategoryList) => {
   return api.get<{
@@ -7,6 +7,10 @@ const list = async ({ page }: CategoryList) => {
     nextPage: number | null;
     totalPages: number;
   }>(`/api/storage/categories?page=${page}&limit=${20}`);
+};
+
+const create = async (data: CategoryValues) => {
+  await api.post('/api/storage/categories/create', data);
 };
 
 const remove = async (id: string | number) => {
@@ -19,5 +23,6 @@ interface CategoryList {
 
 export const categoryRequests = {
   list,
+  create,
   remove,
 };
