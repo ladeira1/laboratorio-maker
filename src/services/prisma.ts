@@ -3,9 +3,11 @@ import { PrismaClient } from '@prisma/client';
 
 export const prisma = new PrismaClient();
 
+const SOFT_DELETE_MODELS = ['Product', 'Category', 'Locker'];
+
 prisma.$use(async (params, next) => {
   // Check incoming query type
-  if (params.model === 'Product') {
+  if (SOFT_DELETE_MODELS.includes(params.model ?? '')) {
     if (params.action === 'delete') {
       // Delete queries
       // Change action to an update

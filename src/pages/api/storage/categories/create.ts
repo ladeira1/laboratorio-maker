@@ -1,19 +1,22 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { prisma } from 'services/prisma';
-import { deleteProductValidator } from 'validators/storage/products/delete';
+import { createCategoryValidator } from 'validators/storage/categories/create';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
-    if (req.method === 'DELETE') {
-      const { pid } = req.query;
+    if (req.method === 'POST') {
+      const { name, description } = req.body;
 
-      await deleteProductValidator(req);
+      await createCategoryValidator(req);
 
-      await prisma.product.delete({
-        where: { id: Number(pid) },
+      const category = await prisma.category.create({
+        data: {
+          name,
+          description,
+        },
       });
 
-      return res.status(204).send(undefined);
+      return res.status(201).json({ category });
     }
     return res.status(400).json({ error: 'Invalid request' });
   } catch (error) {

@@ -7,52 +7,48 @@ import NextLink from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroller';
-import { productRequests } from 'requests/product';
+import { categoryRequests } from 'requests/category';
 import { colors } from 'styles/theme';
-import { ProductDetailsList } from 'types';
+import { CategoryList } from 'types';
 import { getValueFromItem } from 'utils/getValueFromItem';
 
 const valuesByItem = [
-  { title: 'Categoria', value: 'category' },
   { title: 'Nome', value: 'name' },
-  { title: 'Quantidade', value: 'amount' },
-  { title: 'Armário', value: 'locker' },
-  { title: 'Porta', value: 'door' },
-  { title: 'Andar', value: 'floor' },
+  { title: 'Descrição', value: 'description' },
 ];
 
-const Products = () => {
+const Categories = () => {
   const router = useRouter();
 
   const { page, isLoading, shouldFetchMoreData, fetchMoreData } = usePagination(
     {
-      request: () => productRequests.list({ page }),
+      request: () => categoryRequests.list({ page }),
     },
   );
 
-  const [products, setProducts] = useState<ProductDetailsList>([]);
+  const [categories, setCategories] = useState<CategoryList>([]);
 
   const handleFetchMoreData = async () => {
     const data = await fetchMoreData();
 
     if (!data) return;
 
-    setProducts(oldState => [...oldState, ...data.products]);
+    setCategories(oldState => [...oldState, ...data.categories]);
   };
 
-  const handleUpdateSelectedProduct = (id: string | number) => {
-    router.push(`/app/storage/products/update/${id}`);
+  const handleUpdateSelectedCategory = (id: string | number) => {
+    router.push(`/app/storage/categories/update/${id}`);
   };
 
-  const handleDeleteSelectedProduct = async (id: string | number) => {
-    await productRequests.remove(id);
-    setProducts(oldState => oldState.filter(product => product.id !== id));
+  const handleDeleteSelectedCategory = async (id: string | number) => {
+    await categoryRequests.remove(id);
+    setCategories(oldState => oldState.filter(category => category.id !== id));
   };
 
   return (
-    <Wrapper title="Produtos">
+    <Wrapper title="Categorias">
       <Item>
-        <NextLink passHref href="/app/storage/products/create">
+        <NextLink passHref href="/app/storage/categories/create">
           <Button
             as={Link}
             w="100%"
@@ -62,7 +58,7 @@ const Products = () => {
               textDecoration: 'none',
             }}
           >
-            Cadastrar novo produto
+            Cadastrar nova categoria
           </Button>
         </NextLink>
         <Flex
@@ -84,14 +80,14 @@ const Products = () => {
             },
           }}
         >
-          {products && (
+          {categories && (
             <InfiniteScroll
               pageStart={1}
               loadMore={handleFetchMoreData}
               hasMore={shouldFetchMoreData}
             >
               <Flex maxW="100%" flexDir="column">
-                {products?.map(item => (
+                {categories?.map(item => (
                   <ListItem
                     key={item.id}
                     item={{
@@ -101,8 +97,8 @@ const Products = () => {
                         value: getValueFromItem(data.value, item),
                       })),
                     }}
-                    onClick={handleUpdateSelectedProduct}
-                    onDelete={handleDeleteSelectedProduct}
+                    onClick={handleUpdateSelectedCategory}
+                    onDelete={handleDeleteSelectedCategory}
                   />
                 ))}
               </Flex>
@@ -119,4 +115,4 @@ const Products = () => {
   );
 };
 
-export default Products;
+export default Categories;

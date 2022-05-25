@@ -17,6 +17,8 @@ model Category {
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   Product   Product[]
+
+  deleted Boolean @default(false)
 }
 
 model Locker {
@@ -28,6 +30,8 @@ model Locker {
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   Product   Product[]
+
+  deleted Boolean @default(false)
 }
 
 model Product {
