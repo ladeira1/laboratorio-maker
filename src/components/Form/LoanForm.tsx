@@ -1,13 +1,40 @@
 import React from 'react';
 import { Button, Flex, HStack } from "@chakra-ui/react"
 import { TextInput } from './TextInput';
+import { useRouter } from 'next/router';
+import { LoanValues } from 'types';
+import * as yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { useForm } from 'react-hook-form';
 
-export const LoanForm = () => {
+interface LoanFormProps {
+  onSubmit: (values: LoanValues) => void;
+}
+
+const schema = yup.object({
+  name: yup.string().required('Campo obrigatório'),
+  description: yup.string().required('Campo obrigatório'),
+});
+
+export const LoanForm = ({
+  onSubmit,
+}: LoanFormProps) => {
+  const router = useRouter();
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<LoanValues>({
+    resolver: yupResolver(schema),
+    defaultValues: {},
+  });
+
   return (
     <Flex
       flexDir="column"
       as="form"
-      // onSubmit={handleSubmit(onSubmit)}
+      onSubmit={handleSubmit(onSubmit)}
       borderWidth={2}
       borderColor="gray.800"
       borderRadius="5"
@@ -19,36 +46,36 @@ export const LoanForm = () => {
       <TextInput
         placeholder="Nome do item"
         label="Item"
-      // {...register('name')}
-      // error={errors?.name}
+        {...register('item')}
+        error={errors?.item}
       />
 
       <TextInput
         placeholder="Quantidade do item"
         label="Quantidade"
-      // {...register('name')}
-      // error={errors?.name}
+        {...register('quantity')}
+        error={errors?.quantity}
       />
 
       <TextInput
         placeholder="Nome do aluno"
         label="Aluno solicitante"
-      // {...register('description')}
-      // error={errors?.description}
+        {...register('student')}
+        error={errors?.student}
       />
 
       <TextInput
         placeholder="Matrícula do aluno"
         label="Matrícula do solicitante"
-      // {...register('description')}
-      // error={errors?.description}
+        {...register('enrollment')}
+        error={errors?.enrollment}
       />
 
       <TextInput
         placeholder="Nome do responsável"
         label="Responsável pelo empréstimo"
-      // {...register('description')}
-      // error={errors?.description}
+        {...register('responsible')}
+        error={errors?.responsible}
       />
 
       <HStack spacing="8" mt={['4', '12']}>
@@ -56,7 +83,7 @@ export const LoanForm = () => {
           flex="1"
           size="lg"
           variant="outline"
-        // onClick={() => router.back()}
+          onClick={() => router.back()}
         >
           Voltar
         </Button>
