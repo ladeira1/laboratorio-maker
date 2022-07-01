@@ -1,10 +1,8 @@
-import { Flex } from '@chakra-ui/react';
 import React from 'react';
 import { Wrapper } from '../../components/Wrapper';
 
 const Dashboard = () => (
-  <Wrapper title="Dashboard">
-    <Flex />
+  <Wrapper title="Espaço MultiMaker">
   </Wrapper>
 );
 

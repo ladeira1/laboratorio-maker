@@ -1,11 +1,11 @@
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
   previewFeatures = ["referentialIntegrity"]
 }
 
 datasource db {
-  provider = "mysql"
-  url      = env("DATABASE_URL")
+  provider             = "mysql"
+  url                  = env("DATABASE_URL")
   referentialIntegrity = "prisma"
 }
 
@@ -22,7 +22,7 @@ model Category {
 }
 
 model Locker {
-  id             Int     @id @default(autoincrement())
+  id             Int    @id @default(autoincrement())
   numberOfDoors  Int
   numberOfFloors Int
   name           String
@@ -52,6 +52,29 @@ model Product {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  deleted Boolean @default(false)
+}
+
+model Loan {
+  id          Int    @id @default(autoincrement())
+  item        String @db.VarChar(100)
+  quantity    Int
+  student     String
+  enrollment  String
+  responsible String
+
+  createdAt DateTime @default(now())
+
+  deleted Boolean @default(false)
+}
+
+model Schedule {
+  id           Int      @id @default(autoincrement())
+  responsible  String
+  activity     String
+  scheduleDate DateTime
+  scheduleHour DateTime @db.Timestamp(10)
 
   deleted Boolean @default(false)
 }
