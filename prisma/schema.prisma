@@ -68,3 +68,13 @@ model Loan {
 
   deleted Boolean @default(false)
 }
+
+model Schedule {
+  id           Int      @id @default(autoincrement())
+  responsible  String
+  activity     String
+  scheduleDate DateTime
+  scheduleHour DateTime @db.Timestamp(10)
+
+  deleted Boolean @default(false)
+}
