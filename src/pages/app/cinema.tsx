@@ -17,7 +17,7 @@ const Home: NextPage = () => {
         <Item>
           {typeof window !== 'undefined' && (
             <YouTube
-              videoId="B530tFZNGI0"
+              videoId="maYpfE7cP78"
               opts={{
                 height: String(window.innerHeight * 0.78),
                 width: String(window.innerWidth * 0.7),
