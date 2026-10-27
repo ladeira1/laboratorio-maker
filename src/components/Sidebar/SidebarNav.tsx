@@ -15,6 +15,7 @@ import NextLink from 'next/link';
 import { useRouter } from 'next/router';
 import {
   RiCalendarEventLine,
+  RiDraftLine,
   RiFileInfoLine,
   RiHome2Line,
   RiSuitcaseLine,
@@ -32,6 +33,11 @@ const items = [
     icon: RiCalendarEventLine,
     text: 'Agendamento',
     href: '/app/schedule',
+  },
+  {
+    icon: RiDraftLine,
+    text: 'Empréstimo',
+    href: '/app/loan',
   },
   {
     icon: RiSuitcaseLine,
